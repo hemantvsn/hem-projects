@@ -2,10 +2,7 @@ server :
    port : 8080
 spring :
    application :
-      name : cricket
-   jackson :
-      serialization:
-         INDENT_OUTPUT : true
+      name : user-service
 eureka:
   client:
     serviceUrl:

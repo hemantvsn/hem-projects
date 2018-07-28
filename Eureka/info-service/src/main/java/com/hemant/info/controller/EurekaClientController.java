@@ -1,4 +1,4 @@
-package com.hemant.client.controller;
+package com.hemant.info.controller;
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/eureka-clients")
+@RequestMapping("/eureka")
 public class EurekaClientController {
 
 	@Autowired

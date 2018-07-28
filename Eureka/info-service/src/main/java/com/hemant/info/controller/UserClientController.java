@@ -1,6 +1,9 @@
-package com.hemant.client.controller;
+package com.hemant.info.controller;
 
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.ServiceInstance;
@@ -19,23 +22,26 @@ public class UserClientController {
 	@Autowired
 	private DiscoveryClient discoveryClient;
 
-	@Autowired
-	private RestTemplate restTemplate;
+	private RestTemplate restTemplate = new RestTemplate();
 
 	private String userServiceName = "user-service";
 
 	@RequestMapping(value = "/user/{id}", method = RequestMethod.GET)
-	public String getUserById(@PathVariable String id) {
+	public Map<String, String> getUserById(@PathVariable String id) {
 		List<ServiceInstance> serviceInstances = discoveryClient.getInstances(userServiceName);
 
 		if (serviceInstances.isEmpty()) {
 			throw new IllegalArgumentException("No instance found with serviceId :" + userServiceName);
 		}
 		ServiceInstance userServiceInstance = serviceInstances.get(0);
-		String url = userServiceInstance.getUri().toString();
-
+		String url = userServiceInstance.getUri().toString() + "/" + id;
 		ResponseEntity<String> authResponse = restTemplate.exchange(url, HttpMethod.GET, null, String.class);
-		return authResponse.getBody();
+		
+		Map<String, String> map = new LinkedHashMap<>();
+		map.put("url", url);
+		map.put("user-service-response", authResponse.getBody());
+		
+		return map;
 	}
 
 }
